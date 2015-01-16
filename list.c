@@ -2,7 +2,7 @@
 #include <stdlib.h>
 #include "list.h"
 
-node *create_list(node * head,int num)
+node *create_list(node * head,int num)  //num是要创建的节点个数
 {
     node *p, *q;
     if(head != NULL) {
@@ -10,7 +10,7 @@ node *create_list(node * head,int num)
         return head;
     }
 
-    p = (node *)malloc(sizeof(node));
+    p = (node *)malloc(sizeof(node));  //头结点
     p->data = 0;
     p->next=NULL;
     head = p;
@@ -99,7 +99,7 @@ int length(node *head)
         return 0;
 
     p = head;
-    while(p->next != NULL) {
+    while(p != NULL) {
         p = p->next;
         n++;
     }
