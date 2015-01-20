@@ -1,8 +1,8 @@
 #include "tree.h"
 
 
-void CreateBiTree(BiTreePtr &pRoot)
-{
+void CreateBiTree(BiTreePtr &pRoot) //这里是传pRoot的地址，这样就是地址传递了
+{                                   //修改了pRoot的值，可以同步，用*也可以实现
     int a;
     scanf("%d", &a);
     if(a == 0)

@@ -33,7 +33,6 @@ void print_list(node *head)
     node *p;
     if(head == NULL)
         printf("the list is empty\n");
-
     else {
         p = head;
         p = p->next;
@@ -87,8 +86,7 @@ int delete_list(node *head, int i)
         free(head);
         return 2;
     }
-    return 1;
-    
+    return 1;   
 }
 
 int length(node *head)
