@@ -49,6 +49,7 @@ int main()
             printf("i = %d:insert failed !!\n",i);
         }
     }
+
     for(i = 0; i < 15; ++ i)
     {
         if(!insert(pheap,i * 8 - rand()%20))
@@ -56,11 +57,14 @@ int main()
             printf("i = %d:insert failed!!\n",i);
         }
     }
-
+    
+    printf("*********first heap*********\n");
     print_binaryheap(&bheap);
+    printf("*********second heap*********\n");
     print_binaryheap(pheap);
 
     printf("****deleteMin test****\n");
+
     for(i = 0; i < 5; ++ i)
     {
         value = deletemin(&bheap);
@@ -68,7 +72,10 @@ int main()
         value = deletemin(pheap);
         printf("pheap deleted:%d\n",value);
     }
+    
+    printf("*********first heap*********\n");
     print_binaryheap(&bheap);
+    printf("*********another heap*********\n");
     print_binaryheap(pheap);
 
     printf("deleteMin test successed\n");
