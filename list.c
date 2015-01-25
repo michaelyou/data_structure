@@ -1,22 +1,23 @@
+/*编译的时候需要使用g++,gcc不支持引用传值*/
 #include <stdio.h>
 #include <stdlib.h>
 #include "list.h"
 
-node *create_list(node * head,int num)  //num是要创建的节点个数
+void create_list(node &head,int num)  //num是要创建的节点个数
 {
-    node *p, *q;
+    node p, q;
     if(head != NULL) {
         printf("please delete the old list\n");
-        return head;
+        exit(-1);
     }
 
-    p = (node *)malloc(sizeof(node));  //头结点
+    p = (node)malloc(sizeof(node));  //头结点
     p->data = 0;
     p->next=NULL;
     head = p;
 
     while(num > 0) {
-        q = (node *)malloc(sizeof(node));
+        q = (node)malloc(sizeof(node));
         printf("input the number of the node:");
         scanf("%d", &(q->data));
         p->next = q;
@@ -25,12 +26,11 @@ node *create_list(node * head,int num)  //num是要创建的节点个数
         num--;
     }
     printf("the list is created\n");
-    return head;
 }
 
-void print_list(node *head)
+void print_list(node head)
 {
-    node *p;
+    node p;
     if(head == NULL)
         printf("the list is empty\n");
     else {
@@ -45,16 +45,16 @@ void print_list(node *head)
     }
 }
 
-node *add_list(node *head, int n)  //add at the tail
+void add_list(node &head, int n)  //add at the tail
 {
-    node *p, *q;
+    node p, q;
     if(head = NULL)
-        return NULL;
+        exit(-1);
     p = head;
     while(p->next != NULL)
         p = p->next;
     while(n > 0) {
-        q = (node *)malloc(sizeof(node));
+        q = (node)malloc(sizeof(node));
         printf("input the value of new node:");
         scanf("%d", q->data);
         p->next = q;
@@ -62,12 +62,11 @@ node *add_list(node *head, int n)  //add at the tail
         p = q;
         n--;
     }
-    return head;
 }
 
-int delete_list(node *head, int i)
+int delete_list(node head, int i)
 {
-    node *p, *q;
+    node p, q;
     int a;
     if(head == NULL)
         return -1;
@@ -89,9 +88,9 @@ int delete_list(node *head, int i)
     return 1;   
 }
 
-int length(node *head)
+int length(node head)
 {
-    node *p;
+    node p;
     int n = 0;
     if(head == NULL)
         return 0;
@@ -104,9 +103,9 @@ int length(node *head)
     return n;
 }
 
-int insert_list(node *head, int a, int e)
+int insert_list(node head, int a, int e)
 {
-    node *p, *q;
+    node p, q;
     if(head == NULL)
         return 0;
     else if(a > (length(head) + 1)) //make it possible to insert at the tail
@@ -118,7 +117,7 @@ int insert_list(node *head, int a, int e)
             p = p->next;
             a--;
         }
-        q = (node *)malloc(sizeof(node));
+        q = (node)malloc(sizeof(node));
         q->data = e;
         q->next = p->next;
         p->next = q;
@@ -126,9 +125,9 @@ int insert_list(node *head, int a, int e)
     }
 }
 
-int update_list(node *head, int a, int e) //updata means change the data of a specific node
+int update_list(node head, int a, int e) //updata means change the data of a specific node
 {
-    node *p;
+    node p;
     if(head == NULL)
         return 0;
     else if(a > length(head))
@@ -144,9 +143,9 @@ int update_list(node *head, int a, int e) //updata means change the data of a sp
     }
 }
 
-node *destroy_list(node *head)
+node destroy_list(node head)
 {
-    node *p, *q;
+    node p, q;
     q = p =head;
     if(head = NULL) {
         printf("the list is empty\n");
@@ -162,9 +161,9 @@ node *destroy_list(node *head)
     return NULL;
 }
 
-int search_list(node * head,int e)
+int search_list(node head,int e)
 {
-    node *p;
+    node p;
     int n = 0;
     if(head == NULL)
         return 0;
@@ -180,9 +179,9 @@ int search_list(node * head,int e)
     return -1;
 }
 
-void printnodes(node *head, int n)  /* n is the position of the node*/
+void printnodes(node head, int n)  /* n is the position of the node*/
 {
-    node *p;
+    node p;
     if(head == NULL)
         printf("the list is empty\n");
     p = head;
@@ -197,9 +196,9 @@ void printnodes(node *head, int n)  /* n is the position of the node*/
         printf("%4d", p->data);
 }
 
-node *find_node_by_position(node *head, int n)
+node find_node_by_position(node head, int n)
 {
-    node *p;
+    node p;
     if(head == NULL) {
         printf("the list is empty\n");
         return NULL;
@@ -216,9 +215,9 @@ node *find_node_by_position(node *head, int n)
         return p;
 }
 
-void swap_node(node * beforep,node * head)
+void swap_node(node beforep,node head)
 {
-    node *p, *afterp;
+    node p, afterp;
     p = beforep->next;
     afterp = p->next;
 
@@ -227,9 +226,9 @@ void swap_node(node * beforep,node * head)
     afterp->next = p;    
 }
 
-void printlots(node *head_l, node *head_p)
+void printlots(node head_l, node head_p)
 {
-     node *p;
+     node p;
      if(head_p == NULL)
         printf("no need to print\n");
      p = head_p;
@@ -243,9 +242,9 @@ void printlots(node *head_l, node *head_p)
      printf("\n");
 }
 
-node *reverse_list(node * head)  //travel the link
+node reverse_list(node head)  //travel the link
 {
-    node *p, *q;
+    node p, q;
     if(head == NULL)
         return NULL;
     printf("the old list is:");
@@ -261,12 +260,12 @@ node *reverse_list(node * head)  //travel the link
     return head;
 }
 
-node *list_intersect(node * head_q,node * head_p)
+node list_intersect(node head_q,node head_p)
 {
-    node *q, *p;
-    node *result = NULL;
+    node q, p;
+    node result = NULL;
     int i = 1;
-    result = create_list(result, 0);
+    create_list(result, 0);
     if(head_q == NULL || head_p == NULL)
         return NULL;
     q = head_q->next;
@@ -299,12 +298,12 @@ node *list_intersect(node * head_q,node * head_p)
     
 }
 
-node *list_union(node * head_q,node * head_p)
+node list_union(node head_q,node head_p)
 {
-    node *p, *q;
-    node *result = NULL;
+    node p, q;
+    node result = NULL;
     int i = 1;
-    result = create_list(result, 0);
+    create_list(result, 0);
     p = head_p->next;
 
     while(p != NULL) {
@@ -339,4 +338,24 @@ node *list_union(node * head_q,node * head_p)
     }
     
     return result;
+}
+
+/*从尾到头反过来打印一个链表
+ *解法1:从头到尾遍历链表，将结点的值存到栈中，栈是先进后出的，所以从栈中
+ *输出的就是逆序的链表
+ *解法2:递归在本质上就是一个栈结构，用递归实现
+ *下面是用递归实现的代码
+ */
+void PrintListReversingly_Recursively(node pHead)
+{
+    if(pHead != NULL)
+    {
+        if (pHead->next != NULL)
+        {
+            PrintListReversingly_Recursively(pHead->next);
+            printf("%d ", pHead->next->data);
+        }
+ 
+        //printf("%d ", pHead->data);
+    }
 }

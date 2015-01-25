@@ -105,41 +105,41 @@ void heap_sort(int *a, int size)
 
 void merge_sort(int * a, int left, int right)
 {
-        int i = 0;
-        int *atmp = NULL;
-        int *Actr = NULL, *Bctr = NULL, *Cctr = NULL;
+    int i = 0;
+    int *atmp = NULL;
+    int *Actr = NULL, *Bctr = NULL, *Cctr = NULL;
 
-        /*递归退出条件*/
-        if(left >= right)
-                return;
-    
-        atmp = (int *)calloc((right - left + 1) / 2,sizeof(int));
-        if(NULL == atmp)
-                return;
+    /*递归退出条件*/
+    if(left >= right)
+        return;
 
-        for(i = 0; i < (right - left + 1) / 2 ; ++ i)
-                atmp[i] = a[left + i]; 
-    
-        merge_sort(atmp,0,i - 1); 
-        merge_sort(a, left + i, right);
+    atmp = (int *)calloc((right - left + 1) / 2,sizeof(int));
+    if(NULL == atmp)
+        return;
 
-        Actr = atmp;
-        Bctr = a + left + i;
-        Cctr = a + left;
+    for(i = 0; i < (right - left + 1) / 2 ; ++ i)
+        atmp[i] = a[left + i]; 
 
-        while(Actr != atmp + i && Bctr != a + right + 1)
-        { 
-                if(*Actr <= *Bctr)
-                        *Cctr++ = *Actr++;
-                else
-                        *Cctr++ = *Bctr++;
-        } 
-        while(Actr != atmp + i)
-                *Cctr ++ = *Actr++;
-        while(Bctr != a + right + 1)
-                *Cctr ++ = *Bctr ++;
+    merge_sort(atmp,0,i - 1); 
+    merge_sort(a, left + i, right);
 
-        free(atmp);
-        atmp = NULL;
+    Actr = atmp;
+    Bctr = a + left + i;
+    Cctr = a + left;
+
+    while(Actr != atmp + i && Bctr != a + right + 1)
+    { 
+        if(*Actr <= *Bctr)
+            *Cctr++ = *Actr++;
+        else
+            *Cctr++ = *Bctr++;
+    } 
+    while(Actr != atmp + i)
+        *Cctr ++ = *Actr++;
+    while(Bctr != a + right + 1)
+        *Cctr ++ = *Bctr ++;
+
+    free(atmp);
+    atmp = NULL;
 }
 

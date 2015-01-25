@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include "tree.h"
 
+/*
 int main()
 {
     BiTreePtr pRoot = NULL;
@@ -25,4 +26,14 @@ int main()
     PreTravelBiTree(pRoot);
     putchar('\n');
     return 0;
+}
+*/
+
+int main()
+{
+    int length = 8;
+    int preorder[8] = {1, 2, 4, 7, 3, 5, 6, 8};
+    int inorder[8] = {4, 7, 2, 1, 5, 3, 8, 6};
+    BiTreePtr pRoot =  Construct(preorder, inorder, length);
+    PostTravelBiTree(pRoot);    
 }

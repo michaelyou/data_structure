@@ -175,3 +175,61 @@ BiTreePtr delete_node(int a, BiTreePtr &pRoot)
     }
     return pRoot;
 }
+
+/*已知前序遍历和中序遍历，建立二叉树*/
+BiTreePtr ConstructCore
+(
+    int* startPreorder, int* endPreorder, 
+    int* startInorder, int* endInorder
+)
+{
+    // 前序遍历序列的第一个数字是根结点的值
+    int rootValue = startPreorder[0];
+    BiTreePtr root = (BiTreePtr)malloc(sizeof(struct node));
+    root->data = rootValue;
+    root->plChild = root->prChild = NULL;
+
+    if(startPreorder == endPreorder)
+    {
+        if(startInorder == endInorder && *startPreorder == *startInorder)
+            return root;
+        else
+            printf("Invalid input.\n");
+    }
+
+    // 在中序遍历中找到根结点的值
+    int* rootInorder = startInorder;
+    while(rootInorder <= endInorder && *rootInorder != rootValue)
+        ++ rootInorder;
+
+    if(rootInorder == endInorder && *rootInorder != rootValue)
+        printf("Invalid input.");
+
+    int leftLength = rootInorder - startInorder;
+    int* leftPreorderEnd = startPreorder + leftLength;
+    if(leftLength > 0)
+    {
+        // 构建左子树
+        root->plChild= ConstructCore(startPreorder + 1, leftPreorderEnd, 
+            startInorder, rootInorder - 1);
+    }
+    if(leftLength < endPreorder - startPreorder)
+    {
+        // 构建右子树
+        root->prChild= ConstructCore(leftPreorderEnd + 1, endPreorder,
+            rootInorder + 1, endInorder);
+    }
+
+    return root;
+}
+
+BiTreePtr Construct(int* preorder, int* inorder, int length)
+{
+    if(preorder == NULL || inorder == NULL || length <= 0)
+        return NULL;
+
+    return ConstructCore(preorder, preorder + length - 1,
+        inorder, inorder + length - 1);
+}
+
+
