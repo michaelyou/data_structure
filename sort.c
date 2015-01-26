@@ -143,3 +143,45 @@ void merge_sort(int * a, int left, int right)
     atmp = NULL;
 }
 
+/*******************快速排序***********************/
+/*数据交换*/
+void swap(int *x,int *y)
+{
+   int temp;
+   temp = *x;
+   *x = *y;
+   *y = temp;
+}
+
+int choose_pivot(int i,int j )
+{
+   return((i+j) /2);
+}
+
+void quick_sort(int list[],int left,int right)
+{
+   int key,i,j,k;
+   if(left < right)
+   {
+      k = choose_pivot(left,right);
+      swap(&list[left],&list[k]);
+      key = list[left];
+      i = left+1;
+      j = right;
+      while(i <= j)
+      {
+         while((i <= right) && (list[i] <= key))
+                i++;
+         while((j >= left) && (list[j] > key))
+                j--;
+         if( i < j)
+                swap(&list[i],&list[j]);
+      }
+     // 交换两个元素的位置
+      swap(&list[left],&list[j]);
+     // 递归地对较小的数据序列进行排序
+      quick_sort(list,left,j-1);
+      quick_sort(list,j+1,right);
+   }
+}
+

@@ -176,6 +176,7 @@ BiTreePtr delete_node(int a, BiTreePtr &pRoot)
     return pRoot;
 }
 
+
 /*已知前序遍历和中序遍历，建立二叉树*/
 BiTreePtr ConstructCore
 (

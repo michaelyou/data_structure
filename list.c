@@ -1,4 +1,6 @@
-/*编译的时候需要使用g++,gcc不支持引用传值*/
+/*编译的时候需要使用g++,gcc不支持引用传值
+ *这里的实现的链表带头结点，真正的数据从head->next开始
+ */
 #include <stdio.h>
 #include <stdlib.h>
 #include "list.h"
@@ -45,10 +47,10 @@ void print_list(node head)
     }
 }
 
-void add_list(node &head, int n)  //add at the tail
+void add_list(node head, int n)  //add at the tail
 {
     node p, q;
-    if(head = NULL)
+    if(head == NULL)
         exit(-1);
     p = head;
     while(p->next != NULL)
@@ -56,7 +58,7 @@ void add_list(node &head, int n)  //add at the tail
     while(n > 0) {
         q = (node)malloc(sizeof(node));
         printf("input the value of new node:");
-        scanf("%d", q->data);
+        scanf("%d", &(q->data));
         p->next = q;
         q->next = NULL;
         p = q;
@@ -242,6 +244,7 @@ void printlots(node head_l, node head_p)
      printf("\n");
 }
 
+//反转链表
 node reverse_list(node head)  //travel the link
 {
     node p, q;
@@ -251,13 +254,13 @@ node reverse_list(node head)  //travel the link
     print_list(head);
 
     p = head->next;
-    head->next = NULL;
-    while(p != NULL)
+    while(p != NULL && p->next != NULL)
     {
         q = p->next;
-        p->next = head->next;
-    }
-    return head;
+        p->next = q->next;
+        q->next = head->next;
+        head->next = q;
+    }   
 }
 
 node list_intersect(node head_q,node head_p)
@@ -359,3 +362,89 @@ void PrintListReversingly_Recursively(node pHead)
         //printf("%d ", pHead->data);
     }
 }
+
+/*在O(1)时间删除结点*/
+void DeleteNode(node &pListHead, node pToBeDeleted)
+{
+    if(!pListHead || !pToBeDeleted)
+        return;
+
+    // 要删除的结点不是尾结点
+    if(pToBeDeleted->next!= NULL)
+    {
+        node pNext = pToBeDeleted->next;
+        pToBeDeleted->data = pNext->data;
+        pToBeDeleted->next = pNext->next;
+ 
+        delete pNext;
+        pNext = NULL;
+    }
+    // 链表只有一个结点，删除头结点（也是尾结点）
+    else if(pListHead == pToBeDeleted)
+    {
+        delete pToBeDeleted;
+        pToBeDeleted = NULL;
+        pListHead = NULL;
+    }
+    // 链表中有多个结点，删除尾结点
+    else
+    {
+        node pNode = pListHead;
+        while(pNode->next != pToBeDeleted)
+        {
+            pNode = pNode->next;            
+        }
+ 
+        pNode->next = NULL;
+        delete pToBeDeleted;
+        pToBeDeleted = NULL;
+    }
+}
+
+/*合并两个已排序的链表(不带头结点)*/
+node Merge(node pHead1, node pHead2)
+{
+    if(pHead1 == NULL)
+        return pHead2;
+    else if(pHead2 == NULL)
+        return pHead1;
+
+    node pMergedHead = NULL;
+
+    if(pHead1->data < pHead2->data)
+    {
+        pMergedHead = pHead1;
+        pMergedHead->next = Merge(pHead1->next, pHead2);
+    }
+    else
+    {
+        pMergedHead = pHead2;
+        pMergedHead->next = Merge(pHead1, pHead2->next);
+    }
+
+    return pMergedHead;
+}
+/*合并两个已排序的链表(带头结点)*/
+node Merge_with_headnode(node pHead1, node pHead2)
+{
+    if(pHead1 == NULL)
+        return pHead2;
+    else if(pHead2 == NULL)
+        return pHead1;
+
+    node pMergedHead = NULL;
+
+    if(pHead1->data < pHead2->data)
+    {
+        pMergedHead = pHead1;
+        pMergedHead->next = Merge(pHead1->next, pHead2);
+    }
+    else
+    {
+        pMergedHead = pHead2;
+        pMergedHead->next = Merge(pHead1, pHead2->next);
+    }
+
+    return pMergedHead;
+}
+

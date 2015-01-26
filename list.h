@@ -9,7 +9,7 @@ typedef struct Node
 
 void create_list(node &head, int num);
 void print_list(node head);
-void add_list(node &head, int n);
+void add_list(node head, int n);
 int delete_list(node head, int n);
 int length(node head);
 int insert_list(node head, int a, int e);

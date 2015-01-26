@@ -4,7 +4,8 @@
 
 int main(int argc, char **argv) {
     int a[1000] = {1,3,2,8,9,45,74,12,68,10,91,54,7};
-    merge_sort(a, 0, 12);
+    //merge_sort(a, 0, 12);
+    quick_sort(a, 0, 12);
     int i;
     for(i = 0; i < 13; i++)
         printf("%d ", a[i]);
