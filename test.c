@@ -1,12 +1,10 @@
-#include <stdio.h>
-#include <limits.h>
-
-int main()
+#include<stdio.h>
+int main()                                                                    
 {
-    int a = 2000000000;
-    int b = 2000000000;
-    printf("%d\n", INT_MAX);
-    if(a > INT_MAX - b)
-        printf("out\n");
-    printf("%d", (a + b));
-}
+    unsigned int a = 6;
+    int b = -20;
+    (a + b > 6) ? printf(">6\n") : printf("<=6\n");
+    printf("%d\n", (a + b));
+    return 0;
+} 
+

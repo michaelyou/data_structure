@@ -233,4 +233,23 @@ BiTreePtr Construct(int* preorder, int* inorder, int length)
         inorder, inorder + length - 1);
 }
 
+/*写一个函数，输入一个二叉树，树中每个结点存放了一个整数值，函数
+ *返回这颗二叉树中相差最大的两个结点之间的差的绝对值
+ */
+#define MAX_INF 100000
+#define MIN_INF -10000
+int find_max_diff(node *root)
+{
+    static int min = MAX_INF;//初始化为一个足够大的值
+    static int max = MIN_INF;//初始化为一个足够小的值
+    if (root->data < min)
+        min = root->data;
+    if (root->data > max)
+        max = root->data;
+    if (root->plChild != NULL)
+        find_max_diff(root->plChild);
+    if (root->prChild!= NULL)
+        find_max_diff(root->prChild);
+    return max - min;
+}
 

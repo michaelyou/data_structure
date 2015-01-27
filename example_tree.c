@@ -35,5 +35,6 @@ int main()
     int preorder[8] = {1, 2, 4, 7, 3, 5, 6, 8};
     int inorder[8] = {4, 7, 2, 1, 5, 3, 8, 6};
     BiTreePtr pRoot =  Construct(preorder, inorder, length);
-    PostTravelBiTree(pRoot);    
+    PostTravelBiTree(pRoot); 
+    printf("the biggest diff in the tree is %d\n", find_max_diff(pRoot));
 }
