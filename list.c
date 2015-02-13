@@ -1,26 +1,32 @@
 /*编译的时候需要使用g++,gcc不支持引用传值
  *这里的实现的链表带头结点，真正的数据从head->next开始
  */
+ 
 #include <stdio.h>
 #include <stdlib.h>
 #include "list.h"
 
-void create_list(node &head,int num)  //num是要创建的节点个数
+#define bool int
+#define false 0
+#define true 1
+
+
+void create_list(Node_t &head,int num)  //num是要创建的节点个数
 {
-    node p, q;
+    Node_t p, q;
     if(head != NULL) {
         printf("please delete the old list\n");
         exit(-1);
     }
 
-    p = (node)malloc(sizeof(node));  //头结点
+    p = (Node_t)malloc(sizeof(Node_t));  //头结点
     p->data = 0;
     p->next=NULL;
     head = p;
 
     while(num > 0) {
-        q = (node)malloc(sizeof(node));
-        printf("input the number of the node:");
+        q = (Node_t)malloc(sizeof(Node_t));
+        printf("input the number of the Node_t:");
         scanf("%d", &(q->data));
         p->next = q;
         q->next = NULL;
@@ -30,9 +36,9 @@ void create_list(node &head,int num)  //num是要创建的节点个数
     printf("the list is created\n");
 }
 
-void print_list(node head)
+void print_list(Node_t head)
 {
-    node p;
+    Node_t p;
     if(head == NULL)
         printf("the list is empty\n");
     else {
@@ -47,17 +53,23 @@ void print_list(node head)
     }
 }
 
-void add_list(node head, int n)  //add at the tail
+/*return true if list is empty*/
+int is_empty(Node_t head)
 {
-    node p, q;
+    return head->next == NULL;
+}
+
+void add_list(Node_t head, int n)  //add at the tail
+{
+    Node_t p, q;
     if(head == NULL)
         exit(-1);
     p = head;
     while(p->next != NULL)
         p = p->next;
     while(n > 0) {
-        q = (node)malloc(sizeof(node));
-        printf("input the value of new node:");
+        q = (Node_t)malloc(sizeof(Node_t));
+        printf("input the value of new Node_t:");
         scanf("%d", &(q->data));
         p->next = q;
         q->next = NULL;
@@ -66,9 +78,9 @@ void add_list(node head, int n)  //add at the tail
     }
 }
 
-int delete_list(node head, int i)
+int delete_list(Node_t head, int i)
 {
-    node p, q;
+    Node_t p, q;
     int a;
     if(head == NULL)
         return -1;
@@ -90,24 +102,25 @@ int delete_list(node head, int i)
     return 1;   
 }
 
-int length(node head)
+int length(Node_t head)
 {
-    node p;
+    Node_t p;
     int n = 0;
     if(head == NULL)
         return 0;
 
-    p = head;
+    p = head->next;    
     while(p != NULL) {
         p = p->next;
         n++;
     }
+
     return n;
 }
 
-int insert_list(node head, int a, int e)
+int insert_list(Node_t head, int a, int e)
 {
-    node p, q;
+    Node_t p, q;
     if(head == NULL)
         return 0;
     else if(a > (length(head) + 1)) //make it possible to insert at the tail
@@ -119,7 +132,7 @@ int insert_list(node head, int a, int e)
             p = p->next;
             a--;
         }
-        q = (node)malloc(sizeof(node));
+        q = (Node_t)malloc(sizeof(Node_t));
         q->data = e;
         q->next = p->next;
         p->next = q;
@@ -127,9 +140,11 @@ int insert_list(node head, int a, int e)
     }
 }
 
-int update_list(node head, int a, int e) //updata means change the data of a specific node
+
+//updata means change the data of a specific node
+int update_list(Node_t head, int a, int e) 
 {
-    node p;
+    Node_t p;
     if(head == NULL)
         return 0;
     else if(a > length(head))
@@ -145,9 +160,10 @@ int update_list(node head, int a, int e) //updata means change the data of a spe
     }
 }
 
-node destroy_list(node head)
+
+Node_t destroy_list(Node_t head)
 {
-    node p, q;
+    Node_t p, q;
     q = p =head;
     if(head = NULL) {
         printf("the list is empty\n");
@@ -163,9 +179,10 @@ node destroy_list(node head)
     return NULL;
 }
 
-int search_list(node head,int e)
+
+int search_list(Node_t head,int e)
 {
-    node p;
+    Node_t p;
     int n = 0;
     if(head == NULL)
         return 0;
@@ -181,9 +198,9 @@ int search_list(node head,int e)
     return -1;
 }
 
-void printnodes(node head, int n)  /* n is the position of the node*/
+void printnodes(Node_t head, int n)  /* n is the position of the node*/
 {
-    node p;
+    Node_t p;
     if(head == NULL)
         printf("the list is empty\n");
     p = head;
@@ -198,9 +215,9 @@ void printnodes(node head, int n)  /* n is the position of the node*/
         printf("%4d", p->data);
 }
 
-node find_node_by_position(node head, int n)
+Node_t find_node_by_position(Node_t head, int n)
 {
-    node p;
+    Node_t p;
     if(head == NULL) {
         printf("the list is empty\n");
         return NULL;
@@ -217,9 +234,9 @@ node find_node_by_position(node head, int n)
         return p;
 }
 
-void swap_node(node beforep,node head)
+void swap_node(Node_t beforep,Node_t head)
 {
-    node p, afterp;
+    Node_t p, afterp;
     p = beforep->next;
     afterp = p->next;
 
@@ -228,9 +245,9 @@ void swap_node(node beforep,node head)
     afterp->next = p;    
 }
 
-void printlots(node head_l, node head_p)
+void printlots(Node_t head_l, Node_t head_p)
 {
-     node p;
+     Node_t p;
      if(head_p == NULL)
         printf("no need to print\n");
      p = head_p;
@@ -245,9 +262,9 @@ void printlots(node head_l, node head_p)
 }
 
 //反转链表
-node reverse_list(node head)  //travel the link
+Node_t reverse_list(Node_t head)  //travel the link
 {
-    node p, q;
+    Node_t p, q;
     if(head == NULL)
         return NULL;
     printf("the old list is:");
@@ -263,10 +280,11 @@ node reverse_list(node head)  //travel the link
     }   
 }
 
-node list_intersect(node head_q,node head_p)
+/*链表相交*/
+Node_t list_intersect(Node_t head_q,Node_t head_p)
 {
-    node q, p;
-    node result = NULL;
+    Node_t q, p;
+    Node_t result = NULL;
     int i = 1;
     create_list(result, 0);
     if(head_q == NULL || head_p == NULL)
@@ -301,10 +319,10 @@ node list_intersect(node head_q,node head_p)
     
 }
 
-node list_union(node head_q,node head_p)
+Node_t list_union(Node_t head_q,Node_t head_p)
 {
-    node p, q;
-    node result = NULL;
+    Node_t p, q;
+    Node_t result = NULL;
     int i = 1;
     create_list(result, 0);
     p = head_p->next;
@@ -349,7 +367,7 @@ node list_union(node head_q,node head_p)
  *解法2:递归在本质上就是一个栈结构，用递归实现
  *下面是用递归实现的代码
  */
-void PrintListReversingly_Recursively(node pHead)
+void PrintListReversingly_Recursively(Node_t pHead)
 {
     if(pHead != NULL)
     {
@@ -364,7 +382,7 @@ void PrintListReversingly_Recursively(node pHead)
 }
 
 /*在O(1)时间删除结点*/
-void DeleteNode(node &pListHead, node pToBeDeleted)
+void DeleteNode(Node_t &pListHead, Node_t pToBeDeleted)
 {
     if(!pListHead || !pToBeDeleted)
         return;
@@ -372,7 +390,7 @@ void DeleteNode(node &pListHead, node pToBeDeleted)
     // 要删除的结点不是尾结点
     if(pToBeDeleted->next!= NULL)
     {
-        node pNext = pToBeDeleted->next;
+        Node_t pNext = pToBeDeleted->next;
         pToBeDeleted->data = pNext->data;
         pToBeDeleted->next = pNext->next;
  
@@ -389,7 +407,7 @@ void DeleteNode(node &pListHead, node pToBeDeleted)
     // 链表中有多个结点，删除尾结点
     else
     {
-        node pNode = pListHead;
+        Node_t pNode = pListHead;
         while(pNode->next != pToBeDeleted)
         {
             pNode = pNode->next;            
@@ -401,50 +419,137 @@ void DeleteNode(node &pListHead, node pToBeDeleted)
     }
 }
 
-/*合并两个已排序的链表(不带头结点)*/
-node Merge(node pHead1, node pHead2)
+
+
+/*合并两个已排序的链表(递归实现，链表带头结点)*/
+Node_t Merge_recursive_core(Node_t pHead1, Node_t pHead2)
 {
     if(pHead1 == NULL)
         return pHead2;
     else if(pHead2 == NULL)
         return pHead1;
 
-    node pMergedHead = NULL;
+    Node_t pMergedHead = NULL;
 
     if(pHead1->data < pHead2->data)
     {
         pMergedHead = pHead1;
-        pMergedHead->next = Merge(pHead1->next, pHead2);
+        pMergedHead->next = Merge_recursive_core(pHead1->next, pHead2);
     }
     else
     {
         pMergedHead = pHead2;
-        pMergedHead->next = Merge(pHead1, pHead2->next);
+        pMergedHead->next = Merge_recursive_core(pHead1, pHead2->next);
     }
 
-    return pMergedHead;
+    return pMergedHead;  
 }
-/*合并两个已排序的链表(带头结点)*/
-node Merge_with_headnode(node pHead1, node pHead2)
+/*因为有表头结点，不加此函数，最后打印出的第一个元素就是0，第二个才是
+真正的数据*/
+Node_t Merge_recursive(Node_t pHead1, Node_t pHead2) {
+    Node_t result;
+    Node_t tmp = Merge_recursive_core(pHead1, pHead2);
+    result = tmp->next;
+    return result;
+}
+
+
+/*合并两个以排序链表(非递归实现，链表带头结点)*/
+/*这里新建了一个头结点，但是并没有重新建立一个链表，没有额外分配空间*/
+Node_t Merge_iterative(Node_t pHead1, Node_t pHead2)
 {
-    if(pHead1 == NULL)
+    Node_t head = NULL, cur, pList1, pList2;
+    
+    pList1 = pHead1->next;
+    pList2 = pHead2->next;
+    if(pHead1 == NULL || pList1 == NULL)
         return pHead2;
-    else if(pHead2 == NULL)
+    if(pHead2 == NULL || pList2 == NULL)
         return pHead1;
 
-    node pMergedHead = NULL;
+    create_list(head, 0);
+    
+    for(cur = head; pList1 != NULL && pList2 != NULL;) {
+        if(pList2->data < pList1->data) {
+            cur->next = pList2;
+            cur = cur->next;
+            pList2 = pList2->next;
+        }
+        else {
+            cur->next = pList1;
+            cur = cur->next;
+            pList1 = pList1->next;
+        }
+    }    
+    cur->next = (pList1 == NULL)? pList2 : pList1;
 
-    if(pHead1->data < pHead2->data)
-    {
-        pMergedHead = pHead1;
-        pMergedHead->next = Merge(pHead1->next, pHead2);
-    }
-    else
-    {
-        pMergedHead = pHead2;
-        pMergedHead->next = Merge(pHead1, pHead2->next);
-    }
-
-    return pMergedHead;
+    return head;
 }
 
+/*找出链表中倒数第k个结点*/
+/*考虑的几点:
+  1.head为空指针
+  2.以head为头结点的链表，结点数小于k
+ */
+Node_t find_kth_to_tail(Node_t head, int k)
+{
+    if(head == NULL || head->next == NULL || k == 0) //设计的计数从0开始
+        return NULL;
+
+    int i;
+    Node_t p_ahead = head->next;
+    Node_t p_behind = head->next;
+    
+    for(i = 0; i < k - 1; i++) {
+        if(p_ahead->next != NULL)
+            p_ahead = p_ahead->next;
+        else
+            return NULL;
+    }
+    
+    while(p_ahead->next != NULL) {
+        p_ahead = p_ahead->next;
+        p_behind = p_behind->next;
+    }
+   
+
+    return p_behind;
+}
+
+
+/*找到两个链表的第一个公共结点*/
+Node_t find_first_common_node(Node_t head1, Node_t head2)
+{
+    if(head1 == NULL || head2 == NULL)
+        return NULL;
+    Node_t p_list_long = head1->next;
+    Node_t p_list_short = head2->next;
+    int length1 = length(head1); 
+    int length2 = length(head2);
+    int nlengthdif = length1 - length2;
+    
+    if(length1 < length2) {
+        p_list_long = head2->next;
+        p_list_short = head1->next;
+        nlengthdif = length2 - length1;
+    }
+
+    int i;
+    for(i = 0; i < nlengthdif; i++) {
+        p_list_long = p_list_long->next;
+    }
+
+    while((p_list_short != NULL) && 
+          (p_list_short != NULL) &&
+          (p_list_short != p_list_long)) {
+        p_list_short = p_list_short->next;
+        p_list_long = p_list_long->next;
+    }
+   
+    Node_t first_common_node = p_list_long;
+    return first_common_node;
+   
+}
+
+/*find if there is a loop in the list*/
+//int find_loop()
