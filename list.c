@@ -20,13 +20,19 @@ void create_list(Node_t &head,int num)  //num是要创建的节点个数
     }
 
     p = (Node_t)malloc(sizeof(Node_t));  //头结点
+    if(p == NULL)
+        exit(-1);
+        
     p->data = 0;
     p->next=NULL;
     head = p;
 
     while(num > 0) {
         q = (Node_t)malloc(sizeof(Node_t));
-        printf("input the number of the Node_t:");
+        if(p == NULL)
+            exit(-1);
+            
+        printf("input the data of the Node_t:");
         scanf("%d", &(q->data));
         p->next = q;
         q->next = NULL;
@@ -40,7 +46,7 @@ void print_list(Node_t head)
 {
     Node_t p;
     if(head == NULL)
-        printf("the list is empty\n");
+        printf("the list is not exist\n");
     else {
         p = head;
         p = p->next;
@@ -54,7 +60,7 @@ void print_list(Node_t head)
 }
 
 /*return true if list is empty*/
-int is_empty(Node_t head)
+bool is_empty(Node_t head)
 {
     return head->next == NULL;
 }
@@ -69,6 +75,9 @@ void add_list(Node_t head, int n)  //add at the tail
         p = p->next;
     while(n > 0) {
         q = (Node_t)malloc(sizeof(Node_t));
+        if(p == NULL)
+            exit(-1);
+            
         printf("input the value of new Node_t:");
         scanf("%d", &(q->data));
         p->next = q;
@@ -78,14 +87,14 @@ void add_list(Node_t head, int n)  //add at the tail
     }
 }
 
-int delete_list(Node_t head, int i)
+Node_t delete_list(Node_t head, int i)
 {
     Node_t p, q;
     int a;
     if(head == NULL)
-        return -1;
+        return NULL;
     if(i < 0 || i > length(head))
-        return 0;
+        return NULL;
     p = head;
     a = i - 1;
     while(a > 0) {
@@ -94,13 +103,9 @@ int delete_list(Node_t head, int i)
     }
     q = p->next;
     p->next = q->next;
-    free(q);
-    if(length(head) == 0) {
-        free(head);
-        return 2;
-    }
-    return 1;   
+    free(q);  
 }
+
 
 int length(Node_t head)
 {
@@ -161,22 +166,17 @@ int update_list(Node_t head, int a, int e)
 }
 
 
-Node_t destroy_list(Node_t head)
+void destroy_list(Node_t head)
 {
     Node_t p, q;
     q = p =head;
-    if(head = NULL) {
-        printf("the list is empty\n");
-        return NULL;
-    }
-
+   
     while(p != NULL) {
         p = p->next;
         free(q);
         q = p;
     }
-    printf("the list has been destroyed");
-    return NULL;
+    printf("the list has been destroyed");    
 }
 
 
@@ -202,7 +202,7 @@ void printnodes(Node_t head, int n)  /* n is the position of the node*/
 {
     Node_t p;
     if(head == NULL)
-        printf("the list is empty\n");
+        printf("the list is not exist\n");
     p = head;
     int i;
     for(i = 0; i < n && p->next != NULL; i++)
@@ -219,7 +219,7 @@ Node_t find_node_by_position(Node_t head, int n)
 {
     Node_t p;
     if(head == NULL) {
-        printf("the list is empty\n");
+        printf("the list is not exist\n");
         return NULL;
     }
     p = head;
@@ -280,7 +280,8 @@ Node_t reverse_list(Node_t head)  //travel the link
     }   
 }
 
-/*链表相交*/
+
+/*链表相交，提取两个链表的公共元素，合成新的链表，链表需要事先排好序*/
 Node_t list_intersect(Node_t head_q,Node_t head_p)
 {
     Node_t q, p;
@@ -319,6 +320,7 @@ Node_t list_intersect(Node_t head_q,Node_t head_p)
     
 }
 
+//合并两个链表，重复的元素只保留一个
 Node_t list_union(Node_t head_q,Node_t head_p)
 {
     Node_t p, q;
@@ -550,6 +552,8 @@ Node_t find_first_common_node(Node_t head1, Node_t head2)
     return first_common_node;
    
 }
+
+/*删除链表中的重复结点，例如链表为1-2-3-3-4-4-5，删除之后变成1-2-5*/
 
 /*find if there is a loop in the list*/
 //int find_loop()

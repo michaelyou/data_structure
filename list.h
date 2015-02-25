@@ -10,11 +10,11 @@ typedef struct node
 void create_list(Node_t &head, int num);
 void print_list(Node_t head);
 void add_list(Node_t head, int n);
-int delete_list(Node_t head, int n);
+Node_t delete_list(Node_t head, int n);
 int length(Node_t head);
 int insert_list(Node_t head, int a, int e);
 int update_list(Node_t head, int a, int e);
-Node_t destroy_list(Node_t head);
+void destroy_list(Node_t head);
 int search_list(Node_t head, int e);
 Node_t reverse_list(Node_t head);
 Node_t sort_list(Node_t head);
