@@ -21,5 +21,5 @@ int BinSearch(int sSource[], int array_size, int key)
             low = mid + 1;	//如果比key小，则往高的位置查找	
     }		
     return -1;	
- }
+}
 

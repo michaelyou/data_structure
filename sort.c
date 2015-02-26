@@ -1,5 +1,52 @@
 #define elementtype int
 
+/*排序算法的稳定性:原本键值一样的元素排序后相对位置不变*/
+
+//冒泡排序最坏情况为将逆序排成正序，此时比较交换次数为n*(n-1)/2，时间
+//复杂度为O(n^2)
+void bubble_sort(elementtype *array, int n) {
+    elementtype tmp;
+    int i = 0, j = 0;
+    for(; i < n - 1; i++) {
+        for(j = n -1; j > i; j--) {
+            if(array[j] < array[j - 1]) {
+                tmp = array[j];
+                array[j] = array[j - 1];
+                array[j - 1] = tmp;
+            }
+        }
+    }
+}
+
+
+//选择排序
+//选择排序是和冒泡排序差不多的一种排序。和冒泡排序交换相连数据不一样
+//的是，选择排序只有在确定了最小的数据之后，才会发生交换
+/*选择排序的时间复杂度为O(n^2),是不稳定的排序算法，例如数组为5,5,3，
+第一次就会将第一个5和3交换。*/
+void select_sort(elementtype *array, int n) {
+    elementtype tmp;
+    int i, j, index;
+    if(array == NULL && n < 0)
+        exit(-1);
+
+    for(i = 0; i < n - 1; i++) {
+        index = i;
+        for(j = i + 1; j < n; j ++) {
+            if(array[j] < array[index])
+                index = j;
+        }
+
+        if(index != i) {
+            tmp = array[i];
+            array[i] = array[index];
+            array[index] = tmp;
+        }
+    }
+}
+
+
+//插入排序
 void insert_sort(elementtype *array, int n) {
     elementtype tmp;
     int p, j;
@@ -28,6 +75,8 @@ void shell_sort(elementtype *array, int n) {
         }
     }
 }
+
+
 
 /****************heap-sort**************************/
 
@@ -101,7 +150,7 @@ void heap_sort(int *a, int size)
 }
 
 /**********************************************/
-
+//归并排序
 
 void merge_sort(int * a, int left, int right)
 {
