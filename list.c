@@ -205,14 +205,13 @@ void printnodes(Node_t head, int n)  /* n is the position of the node*/
         printf("the list is not exist\n");
     p = head;
     int i;
-    for(i = 0; i < n && p->next != NULL; i++)
+    if(n < 1 || n > length(head))
+        exit(-1);
+    for(i = 0; i < n; i++)
         p = p->next;
-    if(p->next == NULL && i != n) {
-        printf("\n");
-        printf("the list is not long enough\n");
-    }
-    else
-        printf("%4d", p->data);
+    
+    printf("the data of the node is %d", p->data);
+    printf("\n");
 }
 
 Node_t find_node_by_position(Node_t head, int n)
@@ -222,16 +221,15 @@ Node_t find_node_by_position(Node_t head, int n)
         printf("the list is not exist\n");
         return NULL;
     }
+    if(n < 1 || n > length(head))
+        return NULL;
+        
     p = head;
     int i;
     for(i = 0; i < n && p->next != NULL; i++)
         p = p->next;
-    if(p->next == NULL && i != n) {
-        printf("can't find the right data\n");
-        return NULL;
-    }
-    else
-        return p;
+    
+    return p;
 }
 
 void swap_node(Node_t beforep,Node_t head)
@@ -376,12 +374,14 @@ void PrintListReversingly_Recursively(Node_t pHead)
         if (pHead->next != NULL)
         {
             PrintListReversingly_Recursively(pHead->next);
-            printf("%d ", pHead->next->data);
+            printf("%4d ", pHead->next->data);
         }
  
         //printf("%d ", pHead->data);
     }
 }
+
+
 
 /*在O(1)时间删除结点*/
 void DeleteNode(Node_t &pListHead, Node_t pToBeDeleted)
@@ -396,7 +396,7 @@ void DeleteNode(Node_t &pListHead, Node_t pToBeDeleted)
         pToBeDeleted->data = pNext->data;
         pToBeDeleted->next = pNext->next;
  
-        delete pNext;
+        free(pNext);
         pNext = NULL;
     }
     // 链表只有一个结点，删除头结点（也是尾结点）
@@ -456,7 +456,7 @@ Node_t Merge_recursive(Node_t pHead1, Node_t pHead2) {
 }
 
 
-/*合并两个以排序链表(非递归实现，链表带头结点)*/
+/*合并两个已排序链表(非递归实现，链表带头结点)*/
 /*这里新建了一个头结点，但是并没有重新建立一个链表，没有额外分配空间*/
 Node_t Merge_iterative(Node_t pHead1, Node_t pHead2)
 {
@@ -470,14 +470,15 @@ Node_t Merge_iterative(Node_t pHead1, Node_t pHead2)
         return pHead1;
 
     create_list(head, 0);
-    
-    for(cur = head; pList1 != NULL && pList2 != NULL;) {
+
+    cur = head;
+    while(pList1 != NULL && pList2 != NULL) {
         if(pList2->data < pList1->data) {
             cur->next = pList2;
             cur = cur->next;
             pList2 = pList2->next;
         }
-        else {
+        else {                          //重估的元素都保留
             cur->next = pList1;
             cur = cur->next;
             pList1 = pList1->next;
@@ -503,7 +504,7 @@ Node_t find_kth_to_tail(Node_t head, int k)
     Node_t p_behind = head->next;
     
     for(i = 0; i < k - 1; i++) {
-        if(p_ahead->next != NULL)
+        if(p_ahead->next != NULL)      //防止结点数小于k
             p_ahead = p_ahead->next;
         else
             return NULL;
@@ -553,7 +554,110 @@ Node_t find_first_common_node(Node_t head1, Node_t head2)
    
 }
 
+/*删除链表中的重复结点，例如链表为1-2-3-3-4-4-5，删除之后变成1-2-3-4-5*/
+void delete_dup_node(Node_t head)
+{
+    if(head == NULL || head->next == NULL)
+        exit(-1);
+    Node_t p, q, tmp;
+    p = head->next;
+    while(p != NULL) {
+        q = p->next;
+        while(q != NULL) {
+            if(q->data == p->data) {
+                tmp = q;
+                q = q->next;
+                p->next = q;
+                free(tmp);
+            }
+            else{               
+                break;
+            }
+        }
+        p = p->next;
+    }
+}
+
 /*删除链表中的重复结点，例如链表为1-2-3-3-4-4-5，删除之后变成1-2-5*/
 
+
+
 /*find if there is a loop in the list*/
-//int find_loop()
+bool is_loop(Node_t head)
+{
+    Node_t p_fast = head;
+    Node_t p_slow = head;
+
+    //如果无环，则fast先走到终点
+    //当链表的长度为奇数时，fast->next为空
+    //当链表的长度为偶数时，fast为空
+    while(p_fast != NULL && p_fast->next != NULL) {
+        p_fast = p_fast->next->next;
+        p_slow = p_slow->next;
+
+        if(p_fast == p_slow)
+            break;
+    }
+
+    if(p_fast == NULL || p_fast->next == NULL)
+        return false;
+    else
+        return true;
+}
+
+//计算环的长度
+int loop_length(Node_t head)
+{
+    if(is_loop(head) == false)
+        return 0;
+
+    Node_t p_fast = head;
+    Node_t p_slow = head;
+    bool again = false;
+    bool begin = false;
+    int length = 0;
+
+    while(true) {
+        p_fast = p_fast->next->next;
+        p_slow = p_slow->next;
+
+        if(p_fast == p_slow && again == true)
+            break;
+
+        if(p_fast == p_slow && again == false) {
+            again = true;
+            begin = true;
+        }
+
+        if(begin == true)
+            length++;
+            
+    }
+    return length;
+}
+
+//找出环的入口，定理:碰撞点到入口的距离 == 头指针到入口的距离
+Node_t find_loop_entrance(Node_t head)
+{
+    if(is_loop(head) == false)
+        return NULL;
+
+    Node_t p_fast = head;
+    Node_t p_slow = head;
+
+    while(true) {
+        p_fast = p_fast->next->next;
+        p_slow = p_slow->next;
+
+        if(p_fast == p_slow)
+            break;
+    }
+
+    p_slow = head;
+    while(p_slow != p_fast) {
+        p_slow = p_slow->next;
+        p_fast = p_fast->next;
+    }
+
+    return p_slow;
+}
