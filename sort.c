@@ -221,36 +221,51 @@ void swap(int *x,int *y)
    *y = temp;
 }
 
-int choose_pivot(int i,int j )
+int median3(int *array, int left, int right)
 {
-   return((i+j) /2);
+    int center = (left + right) / 2;
+    
+    if(array[left] > array[center])
+        swap(&array[left], &array[center]);
+    if(array[left] > array[right])
+        swap(&array[left], &array[right]);
+    if(array[center] > array[right])
+        swap(&array[center], &array[right]);
+
+    swap(&array[center], &array[right - 1]);
+
+    return array[right - 1];
 }
 
 /*递归和分治*/
+#define Cutoff 3
 void quick_sort(int list[],int left,int right)
 {
-   int key,i,j,k;
-   if(left < right)
+   //median3需要数组至少有4个数，left，right，middle，right-1
+   if(left + Cutoff <= right)   
    {
-      k = choose_pivot(left,right);
-      swap(&list[left],&list[k]);
-      key = list[left];
-      i = left+1;
-      j = right;
-      while(i < j)
+      int key,i,j;
+      key = median3(list,left,right);
+      
+      i = left;
+      j = right - 1;
+      
+      while(1)
       {
-         while((i <= right) && (list[i] < key))
-                i++;
-         while((j >= left) && (list[j] > key))
-                j--;
+         while(list[++i] < key){}
+         while(list[--j] > key){}
          if( i < j)
                 swap(&list[i],&list[j]);
+         else
+            break;
       }
      // 交换两个元素的位置
-      swap(&list[left],&list[j]);
+      swap(&list[i],&list[right - 1]);
      // 递归地对较小的数据序列进行排序
-      quick_sort(list,left,j-1);
-      quick_sort(list,j+1,right);
+      quick_sort(list,left,i-1);
+      quick_sort(list,i+1,right);
+   }
+   else {
+        insert_sort(list + left, right - left + 1);
    }
 }
-
