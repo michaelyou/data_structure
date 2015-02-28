@@ -2,6 +2,16 @@
 
 /*排序算法的稳定性:原本键值一样的元素排序后相对位置不变*/
 
+/*数据交换*/
+void swap(int *x,int *y)
+{
+   int temp;
+   temp = *x;
+   *x = *y;
+   *y = temp;
+}
+
+
 //冒泡排序最坏情况为将逆序排成正序，此时比较交换次数为n*(n-1)/2，时间
 //复杂度为O(n^2)
 void bubble_sort(elementtype *array, int n) {
@@ -10,9 +20,7 @@ void bubble_sort(elementtype *array, int n) {
     for(; i < n - 1; i++) {
         for(j = n -1; j > i; j--) {
             if(array[j] < array[j - 1]) {
-                tmp = array[j];
-                array[j] = array[j - 1];
-                array[j - 1] = tmp;
+                swap(array[j], array[j-1]);
             }
         }
     }
@@ -39,9 +47,7 @@ void select_sort(elementtype *array, int n) {
         }
 
         if(index != i) {
-            tmp = array[i];
-            array[i] = array[index];
-            array[index] = tmp;
+            swap(array[i], array[index]);
         }
     }
 }
@@ -129,7 +135,7 @@ void perc_down(int *a, int i, int size)
     /*保存结点的位置找到*/
     a[i] = tmp;
 }
-
+/*大根堆*/
 void build_maxheap(int *a, int size)
 {
     int step = 0;
@@ -153,12 +159,9 @@ void heap_sort(int *a, int size)
         printf("%d ", a[i]);
     printf("\n");
     
-    for(i = size - 1; i > 0; --i)
+    for(i = size - 1; i > 0; i--)
     {
-        /*swap(a[i],a[0])*/
-        a[i] = a[i] + a[0];
-        a[0] = a[i] - a[0];
-        a[i] = a[i] - a[0];
+        swap(a[i],a[0]);
         /*更新堆的结构*/
         perc_down(a,0,i);
         
@@ -214,14 +217,7 @@ void merge_sort(int * a, int left, int right)
 
 
 /*******************快速排序***********************/
-/*数据交换*/
-void swap(int *x,int *y)
-{
-   int temp;
-   temp = *x;
-   *x = *y;
-   *y = temp;
-}
+
 
 int median3(int *array, int left, int right)
 {
