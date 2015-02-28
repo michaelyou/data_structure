@@ -19,6 +19,7 @@ void bubble_sort(elementtype *array, int n) {
 }
 
 
+
 //选择排序
 //选择排序是和冒泡排序差不多的一种排序。和冒泡排序交换相连数据不一样
 //的是，选择排序只有在确定了最小的数据之后，才会发生交换
@@ -47,6 +48,17 @@ void select_sort(elementtype *array, int n) {
 
 
 //插入排序
+/*
+有一个已经有序的数据序列，要求在这个已经排好的数据序列中插入一个数，
+但要求插入后此数据序列仍然有序，这个时候就要用到一种新的排序方法——
+插入排序法,插入排序的基本操作就是将一个数据插入到已经排好序的有序数据
+中，从而得到一个新的、个数加一的有序数据，算法适用于少量数据的排序，
+时间复杂度为O(n^2)。是稳定的排序方法。
+插入算法把要排序的数组分成两部分：第一部分包含了这个数组的所有元素，
+但将最后一个元素除外（让数组多一个空间才有插入的位置），
+而第二部分就只包含这一个元素（即待插入元素）。在第一部分排序完成后，
+再将这个最后元素插入到已排好序的第一部分中。
+ */
 void insert_sort(elementtype *array, int n) {
     elementtype tmp;
     int p, j;
@@ -60,18 +72,29 @@ void insert_sort(elementtype *array, int n) {
 }
 
 
+/*
+Shell排序是DL. Shell于1959年针对直接插入排序算法改进提出的，
+属于插入排序的范畴，是对直接插入排序算法的改进。
+直接插入排序在基本有序时效率较高，并且在序列规模不是很大时效率也很高，
+Shell排序就是针对这两点进行改进。核心思想是：待排序列有n个元素，
+先取一个小于n的整数h1作为第一个增量，把待排序列以间隔h1分成若干子序列，
+子序列内使用插入排序；然后取第二个增量h2(< h1)，重复上述的划分和排序，
+直至所取的增量hl = 1 (h1 > h2 > ... > hl)。
+
+这样不管序列多么庞大，在先前较大步长分组下每个子序列规模都不是很大，
+用直接插入效率很高；后面步长变小，子序列变大，
+但由于整体有序性越来越明显，排序效率依然很高，大大提高了时间效率。
+ */
 void shell_sort(elementtype *array, int n) {
     elementtype tmp;
     int increment, i, j;
     for(increment = n/2; increment > 0; increment /= 2) {
         for(i = increment; i < n; i++) {
             tmp = array[i];
-            for(j = i; j >= increment; j -= increment)
-                if(tmp < array[j - increment])
+            for(j = i; j >= increment && array[j - increment] > tmp; j -= increment)
                     array[j] = array[j - increment];
-                else
-                    break;
-             array[j] = tmp;
+
+            array[j] = tmp;
         }
     }
 }
@@ -81,15 +104,15 @@ void shell_sort(elementtype *array, int n) {
 /****************heap-sort**************************/
 
 #define LeftChild(i) (2 * (i) + 1)
-void max_heapify(int *a, int index, int size)
+void perc_down(int *a, int i, int size)
 {
     int child;
 
-    int tmp = a[index];
+    int tmp = a[i];
 
-    for(; LeftChild(index) < size ; index = child)
+    for(; LeftChild(i) < size ; i = child)
     {
-        child = LeftChild(index);
+        child = LeftChild(i);
         if(child != size - 1 && a[child] < a[child + 1])
                 child ++;
 
@@ -99,12 +122,12 @@ void max_heapify(int *a, int index, int size)
          * 需要继续比较
          **************************/
         if(a[child] > tmp)
-                a[index] = a[child];
+                a[i] = a[child];
         else/*不需要提升*/
                 break;
     }
     /*保存结点的位置找到*/
-    a[index] = tmp;
+    a[i] = tmp;
 }
 
 void build_maxheap(int *a, int size)
@@ -117,7 +140,7 @@ void build_maxheap(int *a, int size)
      * 由低层到高层逐渐创建的过程
      **************************************/
     for(step = (size - 1) / 2 ; step >= 0; -- step)
-        max_heapify(a, step, size);
+        perc_down(a, step, size);
 }
 
 void heap_sort(int *a, int size)
@@ -137,17 +160,13 @@ void heap_sort(int *a, int size)
         a[0] = a[i] - a[0];
         a[i] = a[i] - a[0];
         /*更新堆的结构*/
-        max_heapify(a,0,i);
+        perc_down(a,0,i);
         
-        
-        
-        //printf("%d ", a[17]);
-        //printf("\n");
     }
-    for(; i < size; i++)
-        printf("%d ", a[i]);
-    printf("\n");
+   
 }
+
+
 
 /**********************************************/
 //归并排序
@@ -207,6 +226,7 @@ int choose_pivot(int i,int j )
    return((i+j) /2);
 }
 
+/*递归和分治*/
 void quick_sort(int list[],int left,int right)
 {
    int key,i,j,k;
@@ -217,9 +237,9 @@ void quick_sort(int list[],int left,int right)
       key = list[left];
       i = left+1;
       j = right;
-      while(i <= j)
+      while(i < j)
       {
-         while((i <= right) && (list[i] <= key))
+         while((i <= right) && (list[i] < key))
                 i++;
          while((j >= left) && (list[j] > key))
                 j--;
