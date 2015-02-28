@@ -211,6 +211,8 @@ void merge_sort(int * a, int left, int right)
     atmp = NULL;
 }
 
+
+
 /*******************快速排序***********************/
 /*数据交换*/
 void swap(int *x,int *y)
@@ -269,3 +271,40 @@ void quick_sort(int list[],int left,int right)
         insert_sort(list + left, right - left + 1);
    }
 }
+
+/*无视P183的警告的快排*/
+
+void quick_sort(int list[],int left,int right)
+{
+   int key,i,j,k;
+   if(left < right)
+   {
+      k = (left + right) / 2;
+      swap(&list[left],&list[k]);
+      key = list[left];
+      i = left+1;
+      j = right;
+      while(1)
+      {
+         while((i < right) && (list[i] < key))
+                i++;
+         while((j > left) && (list[j] > key))
+                j--;
+         if( i < j) {
+                swap(&list[i],&list[j]);
+                //仅仅是为了防止死循环，见P183
+                if(list[i] == list[j] && list[i] == key) {  
+                    i++;  //j--;
+                }
+         }
+         else
+            break;
+      }
+     // 交换两个元素的位置
+      swap(&list[left],&list[j]);
+     // 递归地对较小的数据序列进行排序
+      quick_sort(list,left,j-1);
+      quick_sort(list,j+1,right);
+   }
+} 
+
