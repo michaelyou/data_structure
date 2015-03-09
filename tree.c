@@ -1,6 +1,5 @@
 #include "tree.h"
 
-
 void CreateBiTree(BiTreePtr &pRoot) //这里是传pRoot的地址，这样就是地址传递了
 {                                   //修改了pRoot的值，可以同步，用*也可以实现
     int a;
@@ -33,7 +32,9 @@ void CreateBiTree(BiTreePtr *pRoot)
     }
 }
   */
-  
+
+/*这里的前序，中序，后序遍历采用的都是递归算法。如果不使用递归算法，可以使用
+栈来取代递归*/  
 void PreTravelBiTree(BiTreePtr pRoot)
 {
     if(pRoot == NULL)

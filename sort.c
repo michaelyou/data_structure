@@ -20,7 +20,7 @@ void bubble_sort(elementtype *array, int n) {
     for(; i < n - 1; i++) {
         for(j = n -1; j > i; j--) {
             if(array[j] < array[j - 1]) {
-                swap(array[j], array[j-1]);
+                swap(&array[j], &array[j-1]);
             }
         }
     }
@@ -47,7 +47,7 @@ void select_sort(elementtype *array, int n) {
         }
 
         if(index != i) {
-            swap(array[i], array[index]);
+            swap(&array[i], &array[index]);
         }
     }
 }
@@ -159,59 +159,73 @@ void heap_sort(int *a, int size)
         printf("%d ", a[i]);
     printf("\n");
     
-    for(i = size - 1; i > 0; i--)
+    for(i = size - 1; i > 0; )
     {
-        swap(a[i],a[0]);
+        swap(&a[i],&a[0]);
         /*更新堆的结构*/
-        perc_down(a,0,i);
-        
-    }
-   
+        perc_down(a,0,i);  //传去的i被认为是数组大小
+    }  
 }
 
 
 
 /**********************************************/
 //归并排序
-
-void merge_sort(int * a, int left, int right)
+/*left_start is the start of the left half, right_start is the start of the
+  right half*/
+void merge(int *array, int *tmp_array, int left_start, int right_start, int right_end)
 {
-    int i = 0;
-    int *atmp = NULL;
-    int *Actr = NULL, *Bctr = NULL, *Cctr = NULL;
+    int left_end = right_start-1;
+    int length = right_end-left_start+1;
 
-    /*递归退出条件*/
-    if(left >= right)
-        return;
+    int tmp_pos = left_start;
 
-    atmp = (int *)calloc((right - left + 1) / 2,sizeof(int));
-    if(NULL == atmp)
-        return;
-
-    for(i = 0; i < (right - left + 1) / 2 ; ++ i)
-        atmp[i] = a[left + i]; 
-
-    merge_sort(atmp,0,i - 1); 
-    merge_sort(a, left + i, right);
-
-    Actr = atmp;
-    Bctr = a + left + i;
-    Cctr = a + left;
-
-    while(Actr != atmp + i && Bctr != a + right + 1)
-    { 
-        if(*Actr <= *Bctr)
-            *Cctr++ = *Actr++;
+    while(left_start <= left_end && right_start <= right_end) {
+        if(array[left_start] <= array[right_start])
+            tmp_array[tmp_pos++] = array[left_start++];
         else
-            *Cctr++ = *Bctr++;
-    } 
-    while(Actr != atmp + i)
-        *Cctr ++ = *Actr++;
-    while(Bctr != a + right + 1)
-        *Cctr ++ = *Bctr ++;
+            tmp_array[tmp_pos++] = array[right_start++];
+    }
 
-    free(atmp);
-    atmp = NULL;
+    /*main loop*/
+    while(left_start <= left_end)
+        tmp_array[tmp_pos++] = array[left_start++];
+    while(right_start <= right_end)
+        tmp_array[tmp_pos++] = array[right_start++];
+
+    /*copy tmp_array back
+      注意这里必须使用right_end作为数组下标，不能用tmp_pos，因为此时的
+      tmp_pos已经越界了，上面多了一次++*/
+    int i;
+    for(i = 0; i < length; i++, right_end--)  
+        array[right_end] = tmp_array[right_end];
+}
+
+void m_sort(int *array, int *tmp_array, int left, int right)
+{
+    int mid;
+    
+    if(left < right) {
+        mid = (left + right)/2;
+        m_sort(array, tmp_array, left, mid);
+        m_sort(array, tmp_array, mid+1, right);
+        merge(array, tmp_array, left, mid+1, right);
+    }
+}
+
+void merge_sort(int *array, int n)
+{
+    if(array == NULL || n <= 0)
+        exit(-1);
+        
+    int *tmp_array = (int *)malloc(n * sizeof(int));
+
+    if(tmp_array != NULL) {
+        m_sort(array, tmp_array, 0, n-1);
+        free(tmp_array);
+    }
+    else
+        exit(-1);
 }
 
 
@@ -270,7 +284,7 @@ void quick_sort(int list[],int left,int right)
 
 /*无视P183的警告的快排*/
 
-void quick_sort(int list[],int left,int right)
+void quick_sort2(int list[],int left,int right)
 {
    int key,i,j,k;
    if(left < right)
@@ -299,8 +313,8 @@ void quick_sort(int list[],int left,int right)
      // 交换两个元素的位置
       swap(&list[left],&list[j]);
      // 递归地对较小的数据序列进行排序
-      quick_sort(list,left,j-1);
-      quick_sort(list,j+1,right);
+      quick_sort2(list,left,j-1);
+      quick_sort2(list,j+1,right);
    }
 } 
 
