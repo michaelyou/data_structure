@@ -10,8 +10,10 @@ int BinSearch(int sSource[], int array_size, int key)
 {		
     int low = 0, high = array_size - 1, mid;
     
-    while (low <= high)	{				
-        mid = (low + high) / 2;//获取中间的位置
+    while (low <= high)	{
+        //获取中间的位置，但是当两个数很大时会溢出，改用下面的方法
+        //mid = (low + high) 
+        mid = low + (high - low)/2  
         
         if (sSource[mid] == key)						
             return mid;	//找到则返回相应的位置		
