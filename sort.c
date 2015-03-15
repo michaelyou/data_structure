@@ -159,7 +159,7 @@ void heap_sort(int *a, int size)
         printf("%d ", a[i]);
     printf("\n");
     
-    for(i = size - 1; i > 0; )
+    for(i = size - 1; i > 0; i--)
     {
         swap(&a[i],&a[0]);
         /*更新堆的结构*/
@@ -235,7 +235,7 @@ void merge_sort(int *array, int n)
 
 int median3(int *array, int left, int right)
 {
-    int center = (left + right) / 2;
+    int center = (left + right) / 2; //有可能溢出
     
     if(array[left] > array[center])
         swap(&array[left], &array[center]);
@@ -311,10 +311,10 @@ void quick_sort2(int list[],int left,int right)
             break;
       }
      // 交换两个元素的位置
-      swap(&list[left],&list[j]);
+      swap(&list[left],&list[i]);
      // 递归地对较小的数据序列进行排序
-      quick_sort2(list,left,j-1);
-      quick_sort2(list,j+1,right);
+      quick_sort2(list,left,i-1);
+      quick_sort2(list,i+1,right);
    }
 } 
 
